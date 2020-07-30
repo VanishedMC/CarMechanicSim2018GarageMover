@@ -3,11 +3,10 @@ package com.vanishedmc.cms18garageorder;
 import java.awt.*;
 import java.io.File;
 import javax.swing.*;
-import java.nio.file.FileSystems;
-import java.nio.file.Files;
-import java.nio.file.Path;
 import java.util.List;
+import java.nio.file.Path;
 import java.util.ArrayList;
+import java.nio.file.FileSystems;
 
 public class Main {
 
@@ -123,6 +122,7 @@ public class Main {
                 }
             }
 
+            // Sort the list
             garageFiles.sort((file1, file2) -> {
                 int id1 = Integer.parseInt(file1.getName().substring(21).split("\\.")[0]);
                 int id2 = Integer.parseInt(file2.getName().substring(21).split("\\.")[0]);
@@ -202,31 +202,36 @@ public class Main {
     }
 
     private void swap() {
+        // Get the file for selected car 1 and 2
         File car1File = garageFiles.get(car1);
         File car2File = garageFiles.get(car2);
 
+        // Get the parent folder (profile folder)
         File parentFolder = car1File.getParentFile();
 
+        // Get the file names
         String car1FileName = car1File.getName();
         String car2FileName = car2File.getName();
 
+        // Get the new file names
         File tmp = new File(parentFolder, "tmpcmsgarageoderfile");
         File oneTo = new File(parentFolder, car2FileName);
         File twoTo = new File(parentFolder, car1FileName);
 
-        System.out.println(tmp.getAbsolutePath());
-        System.out.println(oneTo.getAbsolutePath());
-        System.out.println(twoTo.getAbsolutePath());
-
-        System.out.println(car1File.renameTo(tmp));
-        System.out.println(car2File.renameTo(twoTo));
-        System.out.println(tmp.renameTo(oneTo));
-
+        // Move file one to a temporary location
+        // Move file 2 to file 1
+        // Move temporary file to file 2
+        car1File.renameTo(tmp);
+        car2File.renameTo(twoTo);
+        tmp.renameTo(oneTo);
+        // Delete temporary file
         tmp.delete();
 
+        // Unselect the buttons
         b1.setSelected(false);
         b2.setSelected(false);
 
+        // Reset variables so more cars can be moved
         car1 = car2 = -1;
         b1 = b2 = null;
     }
